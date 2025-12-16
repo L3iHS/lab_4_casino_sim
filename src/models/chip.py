@@ -6,6 +6,9 @@ class Chip:
         return f'Chip(value={self.value})'
     
     def __add__(self, other: 'Chip') -> 'Chip':  # суммирование фишек
+        if not isinstance(other, Chip):
+            return NotImplemented
+        
         return Chip(self.value + other.value)
     
     def __radd__(self, other: 'Chip') -> 'Chip':
