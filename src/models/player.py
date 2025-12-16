@@ -6,4 +6,4 @@ class Player:
     def __repr__(self) -> str:
         # !r явно показывает экранирование,
         # оставляет например /n для сложных имен
-        return f'Player(name="{self.name!r}", balance={self.balance})'
+        return f'Player(name={self.name!r}, balance={self.balance})'
