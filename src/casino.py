@@ -122,3 +122,45 @@ class Casino:
         new_balance = self._apply_delta(player, -lose_amount)
         log_message = f"LOSE: {player.name} lose_amount={lose_amount} balance {old_balance} -> {new_balance}"
         return log_message
+    
+    def event_wargoose_attack(self) -> str:
+        """
+        Событие: рандомный WarGoose атакует рандомного игрока
+        """        
+        player = self.get_random_player()
+        old_balance = player.balance
+
+        war_geese = [goose for goose in self.geese if isinstance(goose, WarGoose)]
+        if not war_geese:
+            return "ATTACK: Нет зарегистрированных WarGoose для атаки"
+
+        war_goose = self.rng.choice(war_geese)
+        damage = war_goose.attack()
+        new_balance = self._apply_delta(player, -damage)
+        log_message = (
+            f"ATTACK: {war_goose.name} attacked {player.name} "
+            f"damage={damage} balance {old_balance} -> {new_balance}"
+            )
+        return log_message
+
+    def event_honkgoose_scream(self) -> str:
+        """
+        Событие: рандомный HonkGoose издает крик
+        """        
+        player = self.get_random_player()
+        old_balance = player.balance
+        
+        honk_geese = [goose for goose in self.geese if isinstance(goose, HonkGoose)]
+        if not honk_geese:
+            return "HONK: Нет зарегистрированных HonkGoose для крика"
+
+        honk_goose = self.rng.choice(honk_geese)
+        scream = honk_goose()
+        new_balance = self._apply_delta(player, -scream)
+        
+        honk_text = 'Honk! ' * min(scream, 3) + ('...' if scream > 3 else '')
+        log_message = (
+            f"HONK: {honk_goose.name} screamed {honk_text} "
+            f"at {player.name} balance {old_balance} -> {new_balance}"
+            )
+        return log_message
