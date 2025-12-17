@@ -58,16 +58,6 @@ class Casino:
         """
         return name in self.geese
     
-    def _sync_player_balance(self, player: Player) -> None:
-        """
-        Синхронизирует баланс игрока с балансом в казино
-        """
-        if not self.has_player_name(player.name):
-            raise ValueError(
-                f"Игрок с именем {player.name} не зарегистрирован в казино"
-                )
-        player.balance = self.balances[player.name]
-    
     def _apply_delta(self, player: Player, delta: int|float) -> int:
         """
         Применяет изменение баланса игрока и синхронизирует его
@@ -79,3 +69,56 @@ class Casino:
         new_balance = self.balances.change(player.name, delta)
         player.balance = new_balance
         return new_balance
+    
+    def event_bet(self, min_bet: int=1, max_bet: int=None) -> str:
+        """
+        Событие: рандомный игрок делает рандомную ставку
+        """
+        player = self.get_random_player()
+        old_balance = player.balance
+        
+        if old_balance == 0:
+            return f"BET: {player.name} баланс 0, ставка невозможна"
+        
+        upper_bound = old_balance if max_bet is None else min(max_bet, old_balance)
+        if min_bet > upper_bound:
+            raise ValueError("Недостаточно средств для минимальной ставки")
+        
+        bet_amount = self.rng.randint(min_bet, upper_bound)
+        new_balance = self._apply_delta(player, -bet_amount)
+        log_message = f"BET: {player.name} bet_amount={bet_amount} balance {old_balance} -> {new_balance}"
+        return log_message
+
+    def event_win(self, min_win: int=1, max_win: int=None) -> str:
+        """
+        Событие: рандомный игрок выигрывает рандомную сумму
+        """        
+        player = self.get_random_player()
+        old_balance = player.balance
+        
+        upper_bound = old_balance * 2 if max_win is None else max_win
+        if min_win > upper_bound:
+            raise ValueError("upper_bound меньше min_win")
+
+        win_amount = self.rng.randint(min_win, upper_bound)
+        new_balance = self._apply_delta(player, win_amount)
+        log_message = f"WIN: {player.name} win_amount={win_amount} balance {old_balance} -> {new_balance}"
+        return log_message
+    
+    def event_lose(self, min_lose: int=1, max_lose: int=None) -> str:
+        """
+        Событие: рандомный игрок теряет рандомную сумму
+        """        
+        player = self.get_random_player()
+        old_balance = player.balance
+        if old_balance == 0:
+            return f"LOSE: {player.name} баланс 0, потерять нечего"
+        
+        upper_bound = old_balance if max_lose is None else min(max_lose, old_balance)
+        if min_lose > upper_bound:
+            raise ValueError("Недостаточно средств для минимальной потери")
+        
+        lose_amount = self.rng.randint(min_lose, upper_bound)
+        new_balance = self._apply_delta(player, -lose_amount)
+        log_message = f"LOSE: {player.name} lose_amount={lose_amount} balance {old_balance} -> {new_balance}"
+        return log_message
