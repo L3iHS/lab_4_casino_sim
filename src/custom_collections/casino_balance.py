@@ -15,18 +15,18 @@ class CasinoBalance:
         return name in self._data
     
     def __getitem__(self, name: str) -> int:
-        '''
+        """
         Получение баланса по имени игрока
-        '''
+        """
         try:
             return self._data[name]
         except KeyError:
             raise KeyError(f"Игрок с именем {name} не найден")
         
     def __setitem__(self, name: str, balance: int|float) -> None:
-        '''
+        """
         Установка баланса по имени игрока
-        '''
+        """
         balance = max(0, int(balance)) # баланс должен быть >= 0
         old_balance = self._data.get(name)
         if name in self._data:
@@ -37,18 +37,18 @@ class CasinoBalance:
         self._data[name] = balance
         
     def __delitem__(self, name: str) -> None:
-        '''
+        """
         Удаление игрока по имени
-        '''
+        """
         try:
             del self._data[name]
         except KeyError:
             raise KeyError(f"Игрок с именем {name} не найден")
     
     def change(self, name: str, delta: int|float) -> int:
-        '''
+        """
         Изменение баланса игрока на += delta
-        '''
+        """
         try:
             current_balance = self._data[name]
         except KeyError:
