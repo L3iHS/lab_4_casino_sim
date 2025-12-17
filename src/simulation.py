@@ -47,3 +47,7 @@ def run_simulation(steps: int=20, seed: int=1, print_logs: bool=True, print_fina
             print(log)
     
     return logs
+
+
+if __name__ == "__main__":
+    run_simulation()
