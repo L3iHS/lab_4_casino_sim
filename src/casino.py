@@ -2,6 +2,7 @@ import random
 
 from models.player import Player
 from models.goose import Goose, WarGoose, HonkGoose
+from models.chip import Chip
 from custom_collections.casino_balance import CasinoBalance
 from custom_collections.player_collection import PlayerCollection
 from custom_collections.goose_collection import GooseCollection
@@ -58,7 +59,7 @@ class Casino:
         """
         return name in self.geese
     
-    def _apply_delta(self, player: Player, delta: int|float) -> int:
+    def _apply_delta(self, player: Player, delta: int | float) -> int:
         """
         Применяет изменение баланса игрока и синхронизирует его
         """
@@ -76,7 +77,6 @@ class Casino:
         """
         player = self.get_random_player()
         old_balance = player.balance
-        
         if old_balance == 0:
             return f"BET: {player.name} баланс 0, ставка невозможна"
         
@@ -85,8 +85,9 @@ class Casino:
             raise ValueError("Недостаточно средств для минимальной ставки")
         
         bet_amount = self.rng.randint(min_bet, upper_bound)
-        new_balance = self._apply_delta(player, -bet_amount)
-        log_message = f"BET: {player.name} bet_amount={bet_amount} balance {old_balance} -> {new_balance}"
+        chip = Chip(bet_amount)
+        new_balance = self._apply_delta(player, -chip.value)
+        log_message = f"BET: {player.name} bet={chip} balance {old_balance} -> {new_balance}"
         return log_message
 
     def event_win(self, min_win: int=1, max_win: int=None) -> str:
@@ -101,8 +102,9 @@ class Casino:
             raise ValueError("upper_bound меньше min_win")
 
         win_amount = self.rng.randint(min_win, upper_bound)
-        new_balance = self._apply_delta(player, win_amount)
-        log_message = f"WIN: {player.name} win_amount={win_amount} balance {old_balance} -> {new_balance}"
+        chip = Chip(win_amount)
+        new_balance = self._apply_delta(player, chip.value)
+        log_message = f"WIN: {player.name} win={chip} balance {old_balance} -> {new_balance}"
         return log_message
     
     def event_lose(self, min_lose: int=1, max_lose: int=None) -> str:
@@ -119,8 +121,9 @@ class Casino:
             raise ValueError("Недостаточно средств для минимальной потери")
         
         lose_amount = self.rng.randint(min_lose, upper_bound)
-        new_balance = self._apply_delta(player, -lose_amount)
-        log_message = f"LOSE: {player.name} lose_amount={lose_amount} balance {old_balance} -> {new_balance}"
+        chip = Chip(lose_amount)
+        new_balance = self._apply_delta(player, -chip.value)
+        log_message = f"LOSE: {player.name} lose={chip} balance {old_balance} -> {new_balance}"
         return log_message
     
     def event_wargoose_attack(self) -> str:
@@ -136,10 +139,11 @@ class Casino:
 
         war_goose = self.rng.choice(war_geese)
         damage = war_goose.attack()
-        new_balance = self._apply_delta(player, -damage)
+        chip = Chip(damage)
+        new_balance = self._apply_delta(player, -chip.value)
         log_message = (
             f"ATTACK: {war_goose.name} attacked {player.name} "
-            f"damage={damage} balance {old_balance} -> {new_balance}"
+            f"damage={chip} balance {old_balance} -> {new_balance}"
             )
         return log_message
 
@@ -156,9 +160,10 @@ class Casino:
 
         honk_goose = self.rng.choice(honk_geese)
         scream = honk_goose()
-        new_balance = self._apply_delta(player, -scream)
+        chip = Chip(scream)
+        new_balance = self._apply_delta(player, -chip.value)
         
-        honk_text = 'Honk! ' * min(scream, 3) + ('...' if scream > 3 else '')
+        honk_text = 'Honk! ' * min(chip.value, 3) + ('...' if chip.value > 3 else '')
         log_message = (
             f"HONK: {honk_goose.name} screamed {honk_text} "
             f"at {player.name} balance {old_balance} -> {new_balance}"
