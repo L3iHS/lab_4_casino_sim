@@ -13,7 +13,7 @@ class GooseCollection:
                     raise TypeError(
                         "Все элементы должны быть экземплярами класса Goose"
                         )
-            self._items = items.copy()
+            self._items: list[Goose] = items.copy()
     
     def __repr__(self):
         return f"GooseCollection(len={len(self)})"
@@ -24,7 +24,9 @@ class GooseCollection:
     def __iter__(self):
         return iter(self._items)
     
-    def __contains__(self, item: Goose) -> bool:
+    def __contains__(self, item: Goose|str) -> bool:
+        if isinstance(item, str):
+            return any(goose.name == item for goose in self._items)
         return item in self._items
     
     def __getitem__(self, index: int|slice) -> Goose|GooseCollection:
