@@ -24,6 +24,9 @@ class GooseCollection:
     def __iter__(self):
         return iter(self._items)
     
+    def __contains__(self, item: Goose) -> bool:
+        return item in self._items
+    
     def __getitem__(self, index: int|slice) -> Goose|GooseCollection:
         if isinstance(index, slice):
             return GooseCollection(self._items[index])

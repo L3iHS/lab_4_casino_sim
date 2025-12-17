@@ -11,6 +11,9 @@ class CasinoBalance:
     def __iter__(self):
         return iter(self._data)
     
+    def __contains__(self, name: str) -> bool:
+        return name in self._data
+    
     def __getitem__(self, name: str) -> int:
         '''
         Получение баланса по имени игрока
