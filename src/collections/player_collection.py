@@ -14,7 +14,7 @@ class PlayerCollection:
             self._items = items.copy()
     
     def __repr__(self) -> str:
-        return f"PlayerCollection(items={self._items})"
+        return f"PlayerCollection(len={len(self)})"
         
     def __len__(self) -> int:
         return len(self._items)
