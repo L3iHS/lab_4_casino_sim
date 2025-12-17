@@ -28,12 +28,6 @@ class CasinoBalance:
         Установка баланса по имени игрока
         """
         balance = max(0, int(balance)) # баланс должен быть >= 0
-        old_balance = self._data.get(name)
-        if name in self._data:
-            print(f"Баланс игрока {name} изменен с {old_balance} на {balance}")
-        else:
-            print(f"Баланс игрока {name} установлен в {balance}")
-        
         self._data[name] = balance
         
     def __delitem__(self, name: str) -> None:
