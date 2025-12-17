@@ -1,7 +1,6 @@
-from casino import Casino
-from models.player import Player
-from models.goose import WarGoose, HonkGoose
-
+from src.casino import Casino
+from src.models.player import Player
+from src.models.goose import WarGoose, HonkGoose
 
 
 def run_simulation(steps: int=20, seed: int=1, print_logs: bool=True, print_final: bool=True) -> list[str]:

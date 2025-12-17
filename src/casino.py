@@ -1,12 +1,11 @@
 import random
 
-from models.player import Player
-from models.goose import Goose, WarGoose, HonkGoose
-from models.chip import Chip
-from custom_collections.casino_balance import CasinoBalance
-from custom_collections.player_collection import PlayerCollection
-from custom_collections.goose_collection import GooseCollection
-
+from src.models.player import Player
+from src.models.goose import Goose, WarGoose, HonkGoose
+from src.models.chip import Chip
+from src.custom_collections.casino_balance import CasinoBalance
+from src.custom_collections.player_collection import PlayerCollection
+from src.custom_collections.goose_collection import GooseCollection
 
 class Casino:
     def __init__(self, seed: int=1):

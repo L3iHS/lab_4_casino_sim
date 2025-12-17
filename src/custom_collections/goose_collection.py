@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from models.goose import Goose
+from src.models.goose import Goose
 
 
 class GooseCollection:
