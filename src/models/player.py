@@ -4,7 +4,7 @@ class Player:
             self.name = "player"
         else:
             self.name = name
-        self.balance = max(1, int(balance))  # баланс должен быть >=1
+        self.balance = max(0, int(balance))  # баланс должен быть >=0
 
     def __repr__(self) -> str:
         # !r явно показывает экранирование,
