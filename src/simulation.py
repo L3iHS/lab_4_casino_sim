@@ -50,3 +50,8 @@ def run_simulation(steps: int=20, seed: int=1, print_logs: bool=True, print_fina
 
 if __name__ == "__main__":
     run_simulation()
+    # print()
+    # run_simulation(print_logs=False, print_final=True)
+    # print()
+    # run_simulation(print_logs=True, print_final=False)
+    

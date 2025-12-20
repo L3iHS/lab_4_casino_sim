@@ -67,7 +67,7 @@ class Casino:
                 f"Игрок с именем {player.name} не зарегистрирован в казино"
                 )
         new_balance = self.balances.change(player.name, delta)
-        player.balance = new_balance
+        player.balance = new_balance  # синхронизация у player будте тот же баланс что и в казино
         return new_balance
     
     def event_bet(self, min_bet: int=1, max_bet: int=None) -> str:
